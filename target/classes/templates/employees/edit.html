@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Modifier Employé</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+<div class="d-flex">
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+    <div class="container mt-4">
+        <h2>Modifier Employé</h2>
+        <form th:action="@{'/employees/edit/' + ${employee.id}}" th:object="${employee}" method="post">
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" th:field="*{nom}" required />
+            </div>
+            <div class="mb-3">
+                <label for="poste" class="form-label">Poste</label>
+                <input type="text" class="form-control" id="poste" th:field="*{poste}" required />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" th:field="*{email}" required />
+            </div>
+            <div class="mb-3">
+                <label for="telephone" class="form-label">Téléphone</label>
+                <input type="text" class="form-control" id="telephone" th:field="*{telephone}" required />
+            </div>
+            <div class="mb-3">
+                <label for="salaire" class="form-label">Salaire (€)</label>
+                <input type="number" step="0.01" class="form-control" id="salaire" th:field="*{salaire}" required />
+            </div>
+            <div class="mb-3">
+                <label for="debutContrat" class="form-label">Début du contrat</label>
+                <input type="date" class="form-control" id="debutContrat" th:field="*{debutContrat}" required />
+            </div>
+            <div class="mb-3">
+                <label for="finContrat" class="form-label">Fin du contrat</label>
+                <input type="date" class="form-control" id="finContrat" th:field="*{finContrat}" />
+            </div>
+            <div class="mb-3">
+                <label for="numeroIdentification" class="form-label">Numéro d'identification</label>
+                <input type="text" class="form-control" id="numeroIdentification" th:field="*{numeroIdentification}" required />
+            </div>
+            <div class="mb-3">
+                <label for="dateNaissance" class="form-label">Date de naissance</label>
+                <input type="date" class="form-control" id="dateNaissance" th:field="*{dateNaissance}" required />
+            </div>
+            <div class="mb-3">
+                <label for="adresse" class="form-label">Adresse</label>
+                <textarea class="form-control" id="adresse" th:field="*{adresse}" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="observations" class="form-label">Observations</label>
+                <textarea class="form-control" id="observations" th:field="*{observations}" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary me-2">Sauvegarder</button>
+            <a th:href="@{'/employees/view/' + ${employee.id}}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
