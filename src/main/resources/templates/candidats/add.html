@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Ajouter un candidat</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-4">
+  <h1 th:text="${#strings.isEmpty(candidat.id) ? 'Ajouter un candidat' : 'Modifier le candidat'}"></h1>
+  <form th:action="@{/candidats/add}" th:object="${candidat}" method="post">
+    <div class="mb-3">
+      <label class="form-label">Nom</label>
+      <input type="text" th:field="*{nom}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Numéro de carte d'identité</label>
+      <input type="text" th:field="*{cin}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Date de naissance</label>
+      <input type="date" th:field="*{dateNaissance}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Adresse</label>
+      <input type="text" th:field="*{adresse}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" th:field="*{email}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Téléphone</label>
+      <input type="text" th:field="*{telephone}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Note</label>
+      <input type="number" min="1" max="10" th:field="*{note}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Poste</label>
+      <input type="text" th:field="*{poste}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Date d'entretien</label>
+      <input type="date" th:field="*{dateEntretien}" class="form-control"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Observation</label>
+      <textarea th:field="*{observation}" class="form-control" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a th:href="@{/candidats}" class="btn btn-secondary">Annuler</a>
+  </form>
+</div>
+</body>
+</html>

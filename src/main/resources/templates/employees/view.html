@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Détails Employé</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+<div class="d-flex">
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <div class="container-fluid p-4">
+        <h2 th:text="'Employé : ' + ${employee.nom}"></h2>
+
+        <div class="mb-3">
+            <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-primary me-2">Mettre à jour</a>
+            <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#congesModal">Attribuer des congés</button>
+            <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#absenceModal">Signaler une absence</button>
+            <form th:action="@{/employees/delete/{id}(id=${employee.id})}" method="post" style="display:inline-block;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cet employé ?')">Supprimer</button>
+            </form>
+        </div>
+
+        <table class="table table-bordered">
+            <tr><th>Nom</th><td th:text="${employee.nom}"></td></tr>
+            <tr><th>Poste</th><td th:text="${employee.poste}"></td></tr>
+            <tr><th>Email</th><td th:text="${employee.email}"></td></tr>
+            <tr><th>Téléphone</th><td th:text="${employee.telephone}"></td></tr>
+            <tr><th>Numéro d'identification</th><td th:text="${employee.numeroIdentification}"></td></tr>
+            <tr><th>Date de naissance</th><td th:text="${employee.dateNaissance}"></td></tr>
+            <tr><th>Adresse</th><td th:text="${employee.adresse}"></td></tr>
+            <tr><th>Salaire</th><td th:text="${employee.salaire} + ' €'"></td></tr>
+            <tr><th>Début du contrat</th><td th:text="${employee.debutContrat}"></td></tr>
+            <tr><th>Fin du contrat</th><td th:text="${employee.finContrat}"></td></tr>
+            <tr><th>Observations</th><td th:text="${employee.observations}"></td></tr>
+        </table>
+
+        <div class="accordion" id="accordionConges">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingConges">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseConges" aria-expanded="false" aria-controls="collapseConges">
+                        Congés (<span th:text="${conges.size()}">0</span>)
+                    </button>
+                </h2>
+                <div id="collapseConges" class="accordion-collapse collapse" aria-labelledby="headingConges" data-bs-parent="#accordionConges">
+                    <div class="accordion-body">
+                        <table class="table">
+                            <thead><tr><th>Date début</th><th>Date fin</th></tr></thead>
+                            <tbody>
+                            <tr th:each="c : ${conges}">
+                                <td th:text="${c.dateDebut}"></td>
+                                <td th:text="${c.dateFin}"></td>
+                            </tr>
+                            <tr th:if="${conges.empty}"><td colspan="2">Aucun congé enregistré.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion mt-3" id="accordionAbsences">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingAbsences">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAbsences" aria-expanded="false" aria-controls="collapseAbsences">
+                        Absences (<span th:text="${absences.size()}">0</span>)
+                    </button>
+                </h2>
+                <div id="collapseAbsences" class="accordion-collapse collapse" aria-labelledby="headingAbsences" data-bs-parent="#accordionAbsences">
+                    <div class="accordion-body">
+                        <table class="table">
+                            <thead><tr><th>Jour d'absence</th></tr></thead>
+                            <tbody>
+                            <tr th:each="a : ${absences}">
+                                <td th:text="${a.jourAbsence}"></td>
+                            </tr>
+                            <tr th:if="${absences.empty}"><td>Aucune absence signalée.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="congesModal" tabindex="-1" aria-labelledby="congesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form th:action="@{/employees/{id}/conges(id=${employee.id})}" method="post" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="congesModalLabel">Attribuer des congés</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="dateDebut" class="form-label">Date début</label>
+                    <input type="date" id="dateDebut" name="dateDebut" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dateFin" class="form-label">Date fin</label>
+                    <input type="date" id="dateFin" name="dateFin" class="form-control" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Attribuer</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="absenceModal" tabindex="-1" aria-labelledby="absenceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form th:action="@{/employees/{id}/absences(id=${employee.id})}" method="post" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="absenceModalLabel">Signaler une absence</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="jourAbsence" class="form-label">Jour d'absence</label>
+                    <input type="date" id="jourAbsence" name="jourAbsence" class="form-control" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-warning">Signaler</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
